@@ -2,11 +2,14 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Parte from './parte';
-import Partes from './partes';
-import { render } from '@testing-library/react';
+import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Login2() {
+  const navigate=useNavigate();
+  const params = useParams();
   const [formValues, setFormValues] = useState({
     
     password: "",
@@ -28,28 +31,26 @@ function Login2() {
     setValidationStates({ ...validationStates, passwordState: validatePassword(password) });
   };
 
-  const handleSelectChange = (e) => {
-    setFormValues({ ...formValues, favClass: e.target.value });
-  };
-
   const clickSubmit = () => {
     const isValidPassword = validatePassword(formValues.password);
 
     if (!isValidPassword) {
       setValidationStates({ ...validationStates, passwordState: false });
       return;
-    }else{
-        return render(<Partes/>)
     }
+    navigate("/partes");
     alert(JSON.stringify(formValues));
+    
   };
+  const intl = useIntl();
+  const currentLocale = intl.locale;
 
   return (
     <div>
-      <h1>Acceder</h1>
+      <h1>{params.correo}</h1>
       <Form>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
+          <Form.Label><FormattedMessage id="Ingresa tu contraseña"/></Form.Label>
           <Form.Control
             type="password"
             placeholder="Password"
@@ -65,7 +66,7 @@ function Login2() {
 
 
         <Button variant="primary" onClick={clickSubmit}>
-          Siguiente
+          <FormattedMessage id="Siguiente"/>
         </Button>
       </Form>
     </div>

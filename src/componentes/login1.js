@@ -3,9 +3,13 @@ import { render } from '@testing-library/react';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from 'react-router-dom';
 import Login2 from './login2';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FormattedMessage, useIntl } from "react-intl";
 
-function Login() {
+function Login1() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
   });
@@ -26,32 +30,28 @@ function Login() {
     setValidationStates({ ...validationStates, emailState: validateEmail(email) });
   };
 
-
-  const handleSelectChange = (e) => {
-    setFormValues({ ...formValues, favClass: e.target.value });
-  };
-
   const clickSubmit = () => {
     const isValidEmail = validateEmail(formValues.email);
 
     if (!isValidEmail) {
       setValidationStates({ ...validationStates, emailState: false });
       return;
-    }else{
-        return render(<Login2/>)
     }
     alert(JSON.stringify(formValues));
+    navigate('/Login2/'+formValues.email);
   };
+  const intl = useIntl();
+  const currentLocale = intl.locale;
 
   return (
     <div>
-      <h1>Acceder</h1>
+      <h1><FormattedMessage id="Acceder"/></h1>
       <Form>
         <Form.Group className="mb-6" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
+          <Form.Label><FormattedMessage id="Correo electronico"/></Form.Label>
           <Form.Control
             type="email"
-            placeholder="Enter email"
+            placeholder="Ingresar Email"
             onChange={handleEmailChange}
             value={formValues.email}
           />
@@ -60,16 +60,14 @@ function Login() {
               Your email should follow and established format.
             </Form.Text>
           )}
-        </Form.Group>
-
-        
+        </Form.Group>        
 
         <Button variant="primary" onClick={clickSubmit} >
-          Siguiente
+          <FormattedMessage id="Siguiente"/>
         </Button>
       </Form>
     </div>
   );
 }
 
-export default Login;
+export default Login1;
